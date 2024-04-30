@@ -1,18 +1,47 @@
 <template>
   <div class="home">
-    <img alt="Vue logo" src="../assets/logo.png">
-    <HelloWorld msg="Welcome to Your Vue.js App"/>
+    <SearchBar @search-location="getWeatherByLocation" />
   </div>
+
+  <div v-if="errorMsg">
+    {{ errorMsg }}
+  </div>  
+
+  <template v-if="weatherData">
+    <div v-if="!errorMsg && weatherData.length === 0">
+        No results found
+    </div>
+  </template>
+
+  
+    <WeatherBanner v-if="weatherData" :datos="weatherData" @track-country="trackThisCountry"/>
+
 </template>
 
 <script>
 // @ is an alias to /src
-import HelloWorld from '@/components/HelloWorld.vue'
+import SearchBar from '@/components/SearchBar.vue';
+import WeatherBanner from '@/components/WeatherBanner.vue';
+import useWeather from '@/composables/useWeather';
 
 export default {
-  name: 'HomeView',
+  name: 'firstStyle',
   components: {
-    HelloWorld
+    SearchBar,
+    WeatherBanner,
+  },
+  setup(){
+
+
+     const {getWeatherByLocation,weatherData, errorMsg,trackThisCountry} = useWeather();  
+
+     return{
+      getWeatherByLocation,
+      weatherData,
+      errorMsg,
+      trackThisCountry,
+    }
+
   }
 }
 </script>
